@@ -64,8 +64,11 @@ bool QXmlStreamEntityDeclaration_operatorNotEqual(const QXmlStreamEntityDeclarat
 
 void QXmlStreamEntityDeclaration_delete(QXmlStreamEntityDeclaration* self);
 
-struct miqt_string QXmlStreamEntityResolver_resolveEntity(QXmlStreamEntityResolver* self, struct miqt_string publicId, struct miqt_string systemId);
+QXmlStreamEntityResolver* QXmlStreamEntityResolver_new();
 struct miqt_string QXmlStreamEntityResolver_resolveUndeclaredEntity(QXmlStreamEntityResolver* self, struct miqt_string name);
+
+bool QXmlStreamEntityResolver_override_virtual_resolveUndeclaredEntity(void* self, intptr_t slot);
+struct miqt_string QXmlStreamEntityResolver_virtualbase_resolveUndeclaredEntity(void* self, struct miqt_string name);
 
 void QXmlStreamEntityResolver_delete(QXmlStreamEntityResolver* self);
 
