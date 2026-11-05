@@ -18,6 +18,7 @@
 extern "C" {
 #endif
 
+struct miqt_string miqt_exec_callback_QXmlStreamEntityResolver_resolveUndeclaredEntity(QXmlStreamEntityResolver*, intptr_t, struct miqt_string);
 #ifdef __cplusplus
 } /* extern C */
 #endif
@@ -117,10 +118,47 @@ void QXmlStreamEntityDeclaration_delete(QXmlStreamEntityDeclaration* self) {
 	delete self;
 }
 
-struct miqt_string QXmlStreamEntityResolver_resolveEntity(QXmlStreamEntityResolver* self, struct miqt_string publicId, struct miqt_string systemId) {
-	QString publicId_QString = QString::fromUtf8(publicId.data, publicId.len);
-	QString systemId_QString = QString::fromUtf8(systemId.data, systemId.len);
-	QString _ret = self->resolveEntity(publicId_QString, systemId_QString);
+class MiqtVirtualQXmlStreamEntityResolver final : public QXmlStreamEntityResolver {
+public:
+
+	MiqtVirtualQXmlStreamEntityResolver(): QXmlStreamEntityResolver() {}
+
+	virtual ~MiqtVirtualQXmlStreamEntityResolver() override = default;
+
+	// cgo.Handle value for overwritten implementation
+	intptr_t handle__resolveUndeclaredEntity = 0;
+
+	// Subclass to allow providing a Go implementation
+	virtual QString resolveUndeclaredEntity(const QString& name) override {
+		if (handle__resolveUndeclaredEntity == 0) {
+			return QXmlStreamEntityResolver::resolveUndeclaredEntity(name);
+		}
+
+		const QString name_ret = name;
+		// Convert QString from UTF-16 in C++ RAII memory to UTF-8 in manually-managed C memory
+		QByteArray name_b = name_ret.toUtf8();
+		struct miqt_string name_ms;
+		name_ms.len = name_b.length();
+		name_ms.data = static_cast<char*>(malloc(name_ms.len));
+		memcpy(name_ms.data, name_b.data(), name_ms.len);
+		struct miqt_string sigval1 = name_ms;
+		struct miqt_string callback_return_value = miqt_exec_callback_QXmlStreamEntityResolver_resolveUndeclaredEntity(this, handle__resolveUndeclaredEntity, sigval1);
+		QString callback_return_value_QString = QString::fromUtf8(callback_return_value.data, callback_return_value.len);
+		free(callback_return_value.data);
+		return callback_return_value_QString;
+	}
+
+	friend struct miqt_string QXmlStreamEntityResolver_virtualbase_resolveUndeclaredEntity(void* self, struct miqt_string name);
+
+};
+
+QXmlStreamEntityResolver* QXmlStreamEntityResolver_new() {
+	return new (std::nothrow) MiqtVirtualQXmlStreamEntityResolver();
+}
+
+struct miqt_string QXmlStreamEntityResolver_resolveUndeclaredEntity(QXmlStreamEntityResolver* self, struct miqt_string name) {
+	QString name_QString = QString::fromUtf8(name.data, name.len);
+	QString _ret = self->resolveUndeclaredEntity(name_QString);
 	// Convert QString from UTF-16 in C++ RAII memory to UTF-8 in manually-managed C memory
 	QByteArray _b = _ret.toUtf8();
 	struct miqt_string _ms;
@@ -130,9 +168,19 @@ struct miqt_string QXmlStreamEntityResolver_resolveEntity(QXmlStreamEntityResolv
 	return _ms;
 }
 
-struct miqt_string QXmlStreamEntityResolver_resolveUndeclaredEntity(QXmlStreamEntityResolver* self, struct miqt_string name) {
+bool QXmlStreamEntityResolver_override_virtual_resolveUndeclaredEntity(void* self, intptr_t slot) {
+	MiqtVirtualQXmlStreamEntityResolver* self_cast = dynamic_cast<MiqtVirtualQXmlStreamEntityResolver*>( (QXmlStreamEntityResolver*)(self) );
+	if (self_cast == nullptr) {
+		return false;
+	}
+
+	self_cast->handle__resolveUndeclaredEntity = slot;
+	return true;
+}
+
+struct miqt_string QXmlStreamEntityResolver_virtualbase_resolveUndeclaredEntity(void* self, struct miqt_string name) {
 	QString name_QString = QString::fromUtf8(name.data, name.len);
-	QString _ret = self->resolveUndeclaredEntity(name_QString);
+	QString _ret = static_cast<MiqtVirtualQXmlStreamEntityResolver*>(self)->QXmlStreamEntityResolver::resolveUndeclaredEntity(name_QString);
 	// Convert QString from UTF-16 in C++ RAII memory to UTF-8 in manually-managed C memory
 	QByteArray _b = _ret.toUtf8();
 	struct miqt_string _ms;

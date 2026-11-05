@@ -102,6 +102,11 @@ const (
 
 type QGraphicsItem__Extension int
 
+const (
+	QGraphicsItem__UserExtension QGraphicsItem__Extension = -2147483648 // overflow
+
+)
+
 type QGraphicsPathItem__ int
 
 const (

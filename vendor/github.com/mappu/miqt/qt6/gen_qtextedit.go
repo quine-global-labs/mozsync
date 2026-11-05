@@ -28,6 +28,8 @@ type QTextEdit__AutoFormattingFlag int
 const (
 	QTextEdit__AutoNone       QTextEdit__AutoFormattingFlag = 0
 	QTextEdit__AutoBulletList QTextEdit__AutoFormattingFlag = 1
+	QTextEdit__AutoAll        QTextEdit__AutoFormattingFlag = -1 // overflow
+
 )
 
 type QTextEdit struct {
@@ -2515,6 +2517,12 @@ func UnsafeNewQTextEdit__ExtraSelection(h unsafe.Pointer) *QTextEdit__ExtraSelec
 func NewQTextEdit__ExtraSelection(param1 *QTextEdit__ExtraSelection) *QTextEdit__ExtraSelection {
 
 	return newQTextEdit__ExtraSelection(C.QTextEdit__ExtraSelection_new(param1.cPointer()))
+}
+
+// NewQTextEdit__ExtraSelection2 constructs a new QTextEdit::ExtraSelection object.
+func NewQTextEdit__ExtraSelection2() *QTextEdit__ExtraSelection {
+
+	return newQTextEdit__ExtraSelection(C.QTextEdit__ExtraSelection_new2())
 }
 
 func (this *QTextEdit__ExtraSelection) Cursor() *QTextCursor {

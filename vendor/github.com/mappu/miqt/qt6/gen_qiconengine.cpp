@@ -171,6 +171,7 @@ public:
 
 		struct miqt_string callback_return_value = miqt_exec_callback_QIconEngine_key(this, handle__key);
 		QString callback_return_value_QString = QString::fromUtf8(callback_return_value.data, callback_return_value.len);
+		free(callback_return_value.data);
 		return callback_return_value_QString;
 	}
 
@@ -245,6 +246,7 @@ public:
 		for(size_t i = 0; i < callback_return_value.len; ++i) {
 			callback_return_value_QList.push_back(*(callback_return_value_arr[i]));
 		}
+		free(callback_return_value.data);
 		return callback_return_value_QList;
 	}
 
@@ -261,6 +263,7 @@ public:
 
 		struct miqt_string callback_return_value = miqt_exec_callback_QIconEngine_iconName(this, handle__iconName);
 		QString callback_return_value_QString = QString::fromUtf8(callback_return_value.data, callback_return_value.len);
+		free(callback_return_value.data);
 		return callback_return_value_QString;
 	}
 
@@ -627,6 +630,10 @@ void QIconEngine_delete(QIconEngine* self) {
 
 QIconEngine__ScaledPixmapArgument* QIconEngine__ScaledPixmapArgument_new(QIconEngine__ScaledPixmapArgument* param1) {
 	return new (std::nothrow) QIconEngine::ScaledPixmapArgument(*param1);
+}
+
+QIconEngine__ScaledPixmapArgument* QIconEngine__ScaledPixmapArgument_new2() {
+	return new (std::nothrow) QIconEngine::ScaledPixmapArgument();
 }
 
 QSize* QIconEngine__ScaledPixmapArgument_size(const QIconEngine__ScaledPixmapArgument* self) {
